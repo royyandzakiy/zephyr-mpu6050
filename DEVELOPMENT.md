@@ -1,0 +1,4 @@
+- implement sleep mode when idle
+- callback will wake up
+- implement simple inference machine
+- implement state machine
