@@ -1,0 +1,12 @@
+/* boards/nrf5340dk_nrf5340_cpuapp.overlay */
+
+/ {
+    aliases {
+        /* empty, in the device tree, these aliases were already assigned
+
+            led0 = &led0;
+            sw0 = &button0;
+
+        */
+    };
+};

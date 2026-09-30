@@ -1,0 +1,20 @@
+tests:
+  drivers.gpio.button_toggle:
+    build_only: false
+    platform_allow:
+      - nrf5340dk/nrf5340/cpuapp
+      - nucleo_g474re
+      - esp32s3_devkitc/esp32s3/procpu
+      - native_sim
+    # TEST SELECTION
+    # 1. Test using pytest/test_shell.py
+    harness: pytest
+
+    # 2. Test using simple shell check
+    # harness: shell
+    # harness_config:
+    #   shell_commands:
+    #     - command: "test_btn"
+    #       expected: "Test: Triggering emulated button press"
+    #     - command: "help"
+    #       expected: "Please press the <Tab> button"

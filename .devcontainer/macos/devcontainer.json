@@ -1,0 +1,51 @@
+{
+  "name": "Zephyr & NCS Build Environment (macOS, no USB)",
+  // Image is amd64 only; Apple Silicon runs it emulated and builds are
+  // roughly 3-5x slower. No /dev passthrough, so no USB debug probes.
+  "image": "ghcr.io/royyandzakiy/zephyr-devcontainer-devel:z4.4.0-sdk1.0.1",
+
+  // The extension host cannot read what use-vanilla exports in a shell, so the
+  // active Zephyr and SDK have to be named here.
+  "containerEnv": {
+    "RUNNER_ALLOW_RUNASROOT": "1",
+    "ZEPHYR_BASE": "/workdir/zephyr-sdks/v4.4.0/zephyr",
+    "ZEPHYR_SDK_INSTALL_DIR": "/workdir/zephyr-sdks/toolchains/zephyr-sdk-1.0.1",
+    "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+    "ZSDK_TOOLCHAINS": "arm-zephyr-eabi x86_64-zephyr-elf xtensa-espressif_esp32_zephyr-elf xtensa-espressif_esp32s3_zephyr-elf",
+    "ZEPHYR_BLOBS": "hal_espressif"
+  },
+
+  "containerUser": "root",
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+  "runArgs": [
+    "--privileged",
+    "--platform=linux/amd64"
+  ],
+
+  "mounts": [
+    // Shared by name across every project on the machine.
+    "source=zephyr-sdks,target=/workdir/zephyr-sdks,type=volume",
+    "source=ncs-sdks,target=/workdir/ncs-sdks,type=volume",
+    // CMake package registry -- the nRF Connect SDK picker reads it, and
+    // setup-sdks.sh rewrites it too late for a fresh container to see it.
+    "source=${localWorkspaceFolderBasename}-cmake-registry,target=/root/.cmake,type=volume",
+    "source=${localWorkspaceFolderBasename}-actions-runner,target=/actions-runner,type=volume"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "twxs.cmake",
+        "nordic-semiconductor.nrf-connect"
+      ],
+      "settings": {
+        "nrf-connect.toolchainManager.installDirectory": "/workdir/ncs-sdks"
+      }
+    }
+  },
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "postStartCommand": "/opt/devcontainer/setup-sdks.sh"
+}

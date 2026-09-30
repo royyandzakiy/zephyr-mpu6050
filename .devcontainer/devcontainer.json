@@ -1,0 +1,56 @@
+{
+  "name": "Zephyr Development",
+  "image": "ghcr.io/royyandzakiy/zephyr-devcontainer-devel:z4.4.0-sdk1.0.1",
+
+  // The extension host cannot read what use-vanilla exports in a shell, so the
+  // active Zephyr and SDK have to be named here.
+  "containerEnv": {
+    "RUNNER_ALLOW_RUNASROOT": "1",
+    "ZEPHYR_BASE": "/workdir/zephyr-sdks/v4.4.0/zephyr",
+    "ZEPHYR_SDK_INSTALL_DIR": "/workdir/zephyr-sdks/toolchains/zephyr-sdk-1.0.1",
+    "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+    "ZSDK_TOOLCHAINS": "arm-zephyr-eabi x86_64-zephyr-elf xtensa-espressif_esp32_zephyr-elf xtensa-espressif_esp32s3_zephyr-elf",
+    "ZEPHYR_BLOBS": "hal_espressif"
+  },
+
+  "containerUser": "root",
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+  "runArgs": [
+    "--privileged"
+  ],
+
+  "mounts": [
+    // Activate this to pass through usb, required only for windows machines
+    // "source=/dev,target=/dev,type=bind,bind-propagation=rslave",
+
+    // Setting actions runner as volume to not need to reconfig everytime rebuild container
+    // "source=${localWorkspaceFolderBasename}-actions-runner,target=/actions-runner,type=volume",
+
+    // Store SDKs in volumes with shared name. Designed to be used by any project that needs it
+    // CMake package registry: ensuers nrf SDK extension is able to find all zephyr SDKs
+    "source=zephyr-sdks,target=/workdir/zephyr-sdks,type=volume",
+    "source=ncs-sdks,target=/workdir/ncs-sdks,type=volume",
+    "source=cmake-registry,target=/root/.cmake,type=volume"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-vscode.cpptools",
+        "twxs.cmake",
+        "nordic-semiconductor.nrf-connect",
+        "thecreativedodo.usbip-connect"
+      ],
+      "settings": {
+        "nrf-connect.toolchainManager.installDirectory": "/workdir/ncs-sdks",
+        "clangd.path": "/usr/bin/clangd",
+        "clangd.checkUpdates": false
+      }
+    }
+  },
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "postStartCommand": "/opt/devcontainer/setup-sdks.sh"
+}

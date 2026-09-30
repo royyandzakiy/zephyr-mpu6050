@@ -1,0 +1,25 @@
+# Build output. `west build -d <dir>` is used here with names like build_native64
+# and build_nrf5340dk, so the whole build* prefix has to go. These two rules are
+# anchored on purpose: an unanchored build* would also swallow docs/building/.
+/build*/
+apps/**/build*/
+
+# Twister output. twister-out*/ and not twister*/, so a docs/twister/ page or a
+# twister_harness/ directory is still tracked.
+twister-out*/
+
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+
+# Local only
+.env
+.claude/settings.local.json
+ANSWER.md
+
+# OS junk. The repo ships .devcontainer/macos/, so macOS matters here.
+.DS_Store
+Thumbs.db
+
+.idea

@@ -1,0 +1,43 @@
+/* tests/drivers/gpio_button_toggle/boards/nrf5340dk_nrf5340_cpuapp.overlay
+ *
+ * On the DK only sw0 moves. led0 stays on the board's real LED1, so every
+ * test_btn press blinks a physical LED while pytest asserts on the log line.
+ *
+ * This file replaces app.overlay for this board, it does not add to it. Zephyr
+ * stops looking once it finds boards/<board>.overlay, so the emulated
+ * controller has to be declared again here. native_sim still gets app.overlay,
+ * which moves both aliases because native_sim has no LED to keep.
+ */
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+    emul_gpio: gpio_emul {
+        compatible = "zephyr,gpio-emul";
+        status = "okay";
+        gpio-controller;
+        #gpio-cells = <2>;
+        ngpios = <4>;
+        interrupt-controller;
+        #interrupt-cells = <2>;
+        rising-edge;
+        falling-edge;
+        high-level;
+        low-level;
+    };
+
+    emul_keys {
+        compatible = "gpio-keys";
+        emul_button_0: emul_button_0 {
+            gpios = <&emul_gpio 0 GPIO_ACTIVE_LOW>;
+            zephyr,code = <INPUT_KEY_0>;
+        };
+    };
+
+    /* sw0 has to move because pytest cannot press the physical button. Once
+     * it moves, the physical button is bound to nothing in this image, so
+     * pressing it by hand during a run does nothing. */
+    aliases {
+        sw0 = &emul_button_0;
+    };
+};

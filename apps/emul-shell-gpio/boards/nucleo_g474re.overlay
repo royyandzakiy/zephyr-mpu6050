@@ -1,0 +1,13 @@
+/* boards/nucleo_g474re.overlay */
+
+/ {
+    aliases {
+        /* empty, in the device tree, these aliases were already assigned
+
+            led0 = &user_led;
+            sw0 = &user_button;
+
+         */
+
+    };
+};

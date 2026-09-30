@@ -1,0 +1,37 @@
+/* boards/native_sim.overlay */
+/ {
+    /* GPIO emulator for native_sim - must match what test_harness expects */
+    emul_gpio: gpio_emul {
+        compatible = "zephyr,gpio-emul";
+        status = "okay";
+        gpio-controller;
+        #gpio-cells = <2>;
+        ngpios = <32>;
+        interrupt-controller;
+        #interrupt-cells = <2>;
+        rising-edge;
+        falling-edge;
+        high-level;
+        low-level;
+    };
+
+    leds {
+        compatible = "gpio-leds";
+        test_led: led_0 {
+            gpios = <&emul_gpio 10 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+    buttons {
+        compatible = "gpio-keys";
+        test_button: btn_0 {
+            gpios = <&emul_gpio 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+            zephyr,code = <0x01>;  /* KEY_0 */
+        };
+    };
+
+    aliases {
+        led0 = &test_led;
+        sw0 = &test_button;
+    };
+};
