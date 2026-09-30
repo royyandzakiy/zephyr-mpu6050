@@ -18,5 +18,6 @@ mpu6050-interrupt/
 |------------|---------|
 | P1.02      | SDA     |
 | P1.03      | SCL     |
+| P1.04      | INT     |
 | VDD        | VCC     |
 | GND        | GND     |
