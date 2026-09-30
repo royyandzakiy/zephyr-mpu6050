@@ -10,7 +10,7 @@
         "editor.formatOnSave": true
     },
     "nrf-connect.applications": [
-        "${workspaceFolder}/apps/emul-shell-gpio"
+        "${workspaceFolder}/apps/mpu6050-interrupt"
     ],
     "cmake.sourceDirectory": "C:/project-coding/iot/projects/zephyr-project-template/apps/emul-shell-gpio",
 }

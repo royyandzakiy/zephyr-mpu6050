@@ -22,7 +22,7 @@
 
   "mounts": [
     // Activate this to pass through usb, required only for windows machines
-    // "source=/dev,target=/dev,type=bind,bind-propagation=rslave",
+    "source=/dev,target=/dev,type=bind,bind-propagation=rslave",
 
     // Setting actions runner as volume to not need to reconfig everytime rebuild container
     // "source=${localWorkspaceFolderBasename}-actions-runner,target=/actions-runner,type=volume",
